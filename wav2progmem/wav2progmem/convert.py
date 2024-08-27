@@ -11,15 +11,15 @@ def wav2progmem(wav: WavFile, file: Path):
     assert wav.format.num_channels == 1, "Only 1 channel is supported"
 
     var_name = re.sub(r"[^\w\d]", "_", file.name).upper()
-    content = "\n    ".join(
+    content = ",\n    ".join(
         ", ".join(f"0x{x:02x}" for x in y)
         for y in chunks(wav.data.data, 12)
     )
 
     return f"""
-const unsigned char {var_name} PROGMEM = {{
+const unsigned char {var_name}[] PROGMEM = {{
     {content}
-}}
+}};
 """
 
 
